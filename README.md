@@ -27,6 +27,10 @@ tells you exactly what the machine will become.
 | Recipe | What it does | Command |
 |--------|--------------|---------|
 | **kiosk** | Fullscreen Chrome/Chromium kiosk that autostarts on login | `curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/kiosk.sh \| sh` |
+| **chrome** | Install Google Chrome (Debian/Ubuntu, x86_64) | `curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/chrome.sh \| sudo sh` |
+| **nodejs** | Install Node.js from NodeSource (default v22) | `curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/nodejs.sh \| sudo sh` |
+| **pm2** | Install PM2 + resurrect-on-boot | `curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/pm2.sh \| sudo sh` |
+| **openssh** | Install and enable the SSH server | `curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/openssh.sh \| sudo sh` |
 | **dcs-prep** | Prepare a machine for DCS work *(work in progress)* | `curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/dcs-prep.sh \| sh` |
 
 The `kiosk` recipe takes optional overrides via environment variables:
@@ -46,10 +50,8 @@ is plain text — open it, or pipe it to a pager instead of `sh`:
 curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/kiosk.sh | less
 ```
 
-Or open the raw source in a browser:
-
-- kiosk — <https://raw.githubusercontent.com/digtaalfathir/bayinit/main/recipes/kiosk.sh>
-- dcs-prep — <https://raw.githubusercontent.com/digtaalfathir/bayinit/main/recipes/dcs-prep.sh>
+Or read the raw source of any recipe in a browser — they all live at the same
+path: `https://raw.githubusercontent.com/digtaalfathir/bayinit/main/recipes/<name>.sh`
 
 ## Pin a version
 
@@ -69,7 +71,28 @@ Tags are cut per release (`v1.0`, `v1.1`, …). The Pages URLs above always trac
 | Recipe | Root? | Target OS | Status |
 |--------|-------|-----------|--------|
 | `kiosk` | no | Linux + desktop session | ready |
+| `chrome` | yes | Debian/Ubuntu, x86_64 | ready |
+| `nodejs` | yes | Debian/Ubuntu | ready |
+| `pm2` | yes | Debian/Ubuntu + systemd | ready |
+| `openssh` | yes | Debian/Ubuntu + systemd | ready |
 | `dcs-prep` | TBD | Linux | skeleton — see `TODO(rifky)` markers |
+
+## Profiles
+
+A **profile** bundles several recipes into one deployment — run one command,
+get a fully configured machine. Profiles live in `profiles/` and are just
+recipes run in the right order (using `sudo` for the ones that need root).
+
+| Profile | Bundles | Command |
+|---------|---------|---------|
+| **monitoring-tablet** | chrome + kiosk | `curl -fsSL https://digtaalfathir.github.io/bayinit/profiles/monitoring-tablet.sh \| sh` |
+
+Env vars flow through to the recipes — point the tablet at your dashboard:
+
+```sh
+KIOSK_URL=https://dashboard.local \
+  curl -fsSL https://digtaalfathir.github.io/bayinit/profiles/monitoring-tablet.sh | sh
+```
 
 ## How to add a recipe
 

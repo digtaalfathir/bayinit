@@ -17,8 +17,8 @@ not a promise — scope and order may shift.
 | Milestone | Focus | Status |
 |-----------|-------|--------|
 | [v1.0](#v10--foundation) | Foundation — static hosting, first recipes | ✅ Done |
-| [v1.1](#v11--core-recipes) | Core recipes (reusable building blocks) | 🚧 In progress |
-| [v1.2](#v12--profiles) | Profiles (bundle recipes into deployments) | 📋 Planned |
+| [v1.1](#v11--core-recipes) | Core recipes (reusable building blocks) | ✅ Done |
+| [v1.2](#v12--profiles) | Profiles (bundle recipes into deployments) | 🚧 In progress |
 | [v1.3](#v13--interactive-configuration) | Interactive configuration (prompt when env unset) | 📋 Planned |
 | [v1.4](#v14--verification) | Verification (`bay verify`) | 📋 Planned |
 | [v1.5](#v15--uninstall) | Uninstall (`bay uninstall`) | 📋 Planned |
@@ -125,40 +125,38 @@ Current recipes:
 - `kiosk` — ready
 - `dcs-prep` — skeleton (see `TODO(rifky)` markers)
 
-### v1.1 — Core recipes 🚧
+### v1.1 — Core recipes ✅
 
-Build reusable building blocks, one job per recipe. Each ships configurable via
-env vars from day one (see [Modular by design](#modular-by-design)).
+The core set. Each does one job and is configurable via env vars from day one
+(see [Modular by design](#modular-by-design)).
 
-- [ ] chrome / chromium
-- [ ] nodejs / pm2
-- [ ] git
-- [ ] docker
-- [ ] nginx
-- [ ] openssh
-- [ ] tailscale / wireguard / vpn
-- [ ] cups / printer-share
-- [ ] rotate-touchscreen
-- [ ] disable-sleep
-- [ ] disable-lockscreen
-- [ ] autostart
+- [x] `kiosk` — fullscreen dashboard kiosk (reference recipe)
+- [x] `chrome` — install Google Chrome
+- [x] `nodejs` — install Node.js
+- [x] `pm2` — install and set up PM2
+- [x] `openssh` — install / enable the SSH server
+- [ ] `vpn` — deferred beyond v1.1; script stays public, keys injected via env (see [Security model](#security-model))
 
-### v1.2 — Profiles 📋
+Everything else (git, docker, nginx, cups/printer, touchscreen & power tweaks,
+tailscale/wireguard, …) waits in the [backlog](#recipe-backlog) until pulled in.
 
-Profiles combine multiple recipes into a single deployment.
+### v1.2 — Profiles 🚧
+
+Profiles bundle several recipes into one deployment — run one command, get a
+fully configured machine. A profile is just recipes run in order (using `sudo`
+for the ones that need root); env vars flow through to them.
+
+First profile (more slot in as device recipes land):
 
 ```
 monitoring-tablet
-├── chrome
-├── kiosk
-├── rotate-touchscreen
-├── disable-sleep
-├── disable-lockscreen
-└── autostart
+├── chrome   → install the browser
+└── kiosk    → fullscreen dashboard + autostart
 ```
 
 ```sh
-curl -fsSL .../profiles/monitoring-tablet.sh | sh
+KIOSK_URL=https://dashboard.local \
+  curl -fsSL .../profiles/monitoring-tablet.sh | sh
 ```
 
 Planned profiles: `monitoring-tablet`, `printer-server`, `developer-machine`,

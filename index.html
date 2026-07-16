@@ -66,10 +66,48 @@
   </div>
 
   <div class="card">
+    <h3>chrome</h3>
+    <p class="desc">Install Google Chrome from Google's official package (Debian/Ubuntu, x86_64).</p>
+    <pre><code>curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/chrome.sh | sudo sh</code></pre>
+    <div class="links"><a href="recipes/chrome.sh">read the script →</a></div>
+  </div>
+
+  <div class="card">
+    <h3>nodejs</h3>
+    <p class="desc">Install Node.js system-wide from NodeSource (default: v22, override with <code>NODE_MAJOR</code>).</p>
+    <pre><code>curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/nodejs.sh | sudo sh</code></pre>
+    <div class="links"><a href="recipes/nodejs.sh">read the script →</a></div>
+  </div>
+
+  <div class="card">
+    <h3>pm2</h3>
+    <p class="desc">Install PM2 and set it up to resurrect running processes on boot. Needs Node.js.</p>
+    <pre><code>curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/pm2.sh | sudo sh</code></pre>
+    <div class="links"><a href="recipes/pm2.sh">read the script →</a></div>
+  </div>
+
+  <div class="card">
+    <h3>openssh</h3>
+    <p class="desc">Install and enable the OpenSSH server. Optional custom port via <code>SSH_PORT</code>.</p>
+    <pre><code>curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/openssh.sh | sudo sh</code></pre>
+    <div class="links"><a href="recipes/openssh.sh">read the script →</a></div>
+  </div>
+
+  <div class="card">
     <h3>dcs-prep <span class="badge">work in progress</span></h3>
     <p class="desc">Prepare a machine for DCS work. Skeleton for now.</p>
     <pre><code>curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/dcs-prep.sh | sh</code></pre>
     <div class="links"><a href="recipes/dcs-prep.sh">read the script →</a></div>
+  </div>
+
+  <h2>Profiles</h2>
+  <p>A profile bundles several recipes into one deployment — one command, a fully set-up machine.</p>
+
+  <div class="card">
+    <h3>monitoring-tablet</h3>
+    <p class="desc">Fresh desktop → fullscreen monitoring tablet: installs Chrome, then sets up the kiosk.</p>
+    <pre><code>curl -fsSL https://digtaalfathir.github.io/bayinit/profiles/monitoring-tablet.sh | sh</code></pre>
+    <div class="links"><a href="profiles/monitoring-tablet.sh">read the script →</a></div>
   </div>
 
   <h2>Inspect before you run</h2>
