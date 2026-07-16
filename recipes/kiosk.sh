@@ -2,21 +2,23 @@
 # ============================================================================
 # BayInit recipe: kiosk
 # ----------------------------------------------------------------------------
-# What : Install a fullscreen Chrome/Chromium kiosk that autostarts on login
-#        and opens a fixed URL. Idempotent — safe to run repeatedly.
+# What : Install a fullscreen Chrome/Chromium kiosk that opens a URL and
+#        (optionally) autostarts on login. Idempotent — safe to run repeatedly.
 # Root : NOT required. Everything installs into the current user's $HOME.
 # OS   : Linux with an XDG desktop session (GNOME, etc.) and google-chrome
 #        or chromium already installed.
-# Env  : KIOSK_URL   page to display    (default: https://desktop-mazda.stechoq-j.com/)
-#        KIOSK_WAIT  startup delay secs  (default: 5)
-#        KIOSK_DIR   install location    (default: $HOME/stechoq-kiosk)
+# Env  : KIOSK_URL        page to display     (default: https://example.com)
+#        KIOSK_WAIT       startup delay secs  (default: 5)
+#        KIOSK_DIR        install location    (default: $HOME/.bayinit-kiosk)
+#        KIOSK_AUTOSTART  start on login 1/0  (default: 1)
 # Usage: curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/kiosk.sh | sh
 # ============================================================================
 set -eu
 
-KIOSK_URL="${KIOSK_URL:-https://desktop-mazda.stechoq-j.com/}"
+KIOSK_URL="${KIOSK_URL:-https://example.com}"
 KIOSK_WAIT="${KIOSK_WAIT:-5}"
-KIOSK_DIR="${KIOSK_DIR:-$HOME/stechoq-kiosk}"
+KIOSK_DIR="${KIOSK_DIR:-$HOME/.bayinit-kiosk}"
+KIOSK_AUTOSTART="${KIOSK_AUTOSTART:-1}"
 AUTOSTART_DIR="$HOME/.config/autostart"
 
 echo "==> kiosk: detecting browser"
@@ -36,7 +38,7 @@ echo "    using $BROWSER"
 # TODO(rifky): auto-install the browser when missing instead of aborting?
 
 echo "==> kiosk: creating $KIOSK_DIR"
-mkdir -p "$KIOSK_DIR" "$AUTOSTART_DIR"
+mkdir -p "$KIOSK_DIR"
 
 echo "==> kiosk: writing launcher"
 cat > "$KIOSK_DIR/kiosk.sh" <<'LAUNCHER'
@@ -71,8 +73,15 @@ BROWSER=$BROWSER
 CONFIG
 fi
 
-echo "==> kiosk: installing autostart entry"
-cat > "$AUTOSTART_DIR/bayinit-kiosk.desktop" <<DESKTOP
+DESKTOP_ENTRY="$AUTOSTART_DIR/bayinit-kiosk.desktop"
+if [ "$KIOSK_AUTOSTART" = "0" ]; then
+    echo "==> kiosk: autostart disabled (KIOSK_AUTOSTART=0)"
+    rm -f "$DESKTOP_ENTRY"
+    echo "==> kiosk: done. Run $KIOSK_DIR/kiosk.sh to start manually."
+else
+    echo "==> kiosk: installing autostart entry"
+    mkdir -p "$AUTOSTART_DIR"
+    cat > "$DESKTOP_ENTRY" <<DESKTOP
 [Desktop Entry]
 Type=Application
 Exec=/bin/sh -c "$KIOSK_DIR/kiosk.sh"
@@ -81,5 +90,5 @@ NoDisplay=false
 X-GNOME-Autostart-enabled=true
 Name=BayInit Kiosk
 DESKTOP
-
-echo "==> kiosk: done. URL=$KIOSK_URL — log out and back in to start."
+    echo "==> kiosk: done. URL=$KIOSK_URL — log out and back in to start."
+fi
