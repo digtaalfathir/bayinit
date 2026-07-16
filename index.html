@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BayInit — Initialize anything. Instantly.</title>
+<style>
+  :root {
+    --bg: #0d1117; --fg: #e6edf3; --muted: #8b949e; --line: #21262d;
+    --card: #161b22; --accent: #58a6ff; --code: #0b0f14;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #ffffff; --fg: #1f2328; --muted: #59636e; --line: #d1d9e0;
+      --card: #f6f8fa; --accent: #0969da; --code: #f6f8fa;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 4rem 1.25rem 6rem; }
+  h1 { font-size: 2.6rem; margin: 0; letter-spacing: -0.02em; }
+  .tagline { color: var(--accent); font-size: 1.2rem; margin: 0.3rem 0 2rem; }
+  p { color: var(--muted); }
+  h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: 0.08em;
+       color: var(--muted); margin: 3rem 0 1rem; }
+  .card { background: var(--card); border: 1px solid var(--line);
+          border-radius: 10px; padding: 1.1rem 1.25rem; margin: 0 0 1rem; }
+  .card h3 { margin: 0 0 0.25rem; font-size: 1.15rem; }
+  .card .desc { color: var(--muted); margin: 0 0 0.85rem; font-size: 0.95rem; }
+  pre { background: var(--code); border: 1px solid var(--line); border-radius: 8px;
+        padding: 0.8rem 1rem; overflow-x: auto; margin: 0; }
+  code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+         font-size: 0.9rem; }
+  .links { margin-top: 0.6rem; font-size: 0.85rem; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .badge { display: inline-block; font-size: 0.7rem; text-transform: uppercase;
+           letter-spacing: 0.05em; color: var(--muted); border: 1px solid var(--line);
+           border-radius: 999px; padding: 0.1rem 0.55rem; margin-left: 0.5rem;
+           vertical-align: middle; }
+  footer { color: var(--muted); font-size: 0.85rem; margin-top: 4rem;
+           border-top: 1px solid var(--line); padding-top: 1.5rem; }
+  .warn { color: var(--fg); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>BayInit</h1>
+  <p class="tagline">Initialize anything. Instantly.</p>
+  <p>
+    One command turns a fresh Linux machine into a fully set-up one — no tools
+    to install first, no backend. Each <strong>recipe</strong> is a single
+    idempotent POSIX shell script you can read before you run.
+  </p>
+
+  <h2>Recipes</h2>
+
+  <div class="card">
+    <h3>kiosk</h3>
+    <p class="desc">Fullscreen Chrome/Chromium kiosk that autostarts on login and opens a fixed URL.</p>
+    <pre><code>curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/kiosk.sh | sh</code></pre>
+    <div class="links"><a href="recipes/kiosk.sh">read the script →</a></div>
+  </div>
+
+  <div class="card">
+    <h3>dcs-prep <span class="badge">work in progress</span></h3>
+    <p class="desc">Prepare a machine for DCS work. Skeleton for now.</p>
+    <pre><code>curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/dcs-prep.sh | sh</code></pre>
+    <div class="links"><a href="recipes/dcs-prep.sh">read the script →</a></div>
+  </div>
+
+  <h2>Inspect before you run</h2>
+  <p class="warn">
+    Never pipe a script into your shell without reading it first. Pipe it to a
+    pager instead of <code>sh</code>:
+  </p>
+  <pre><code>curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/kiosk.sh | less</code></pre>
+
+  <h2>Pin a version</h2>
+  <p>Pages URLs track the latest <code>main</code>. For production, pin to a tag:</p>
+  <pre><code>curl -fsSL https://raw.githubusercontent.com/digtaalfathir/bayinit/v1.0/recipes/kiosk.sh | sh</code></pre>
+
+  <footer>
+    Pure POSIX shell · hosted on GitHub Pages ·
+    <a href="https://github.com/digtaalfathir/bayinit">source on GitHub</a><br>
+    MIT © Rifky Andigta Al-Fathir
+  </footer>
+</div>
+</body>
+</html>
