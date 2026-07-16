@@ -8,11 +8,26 @@
 # Root : REQUIRED (installs a package, manages a service).
 # OS   : Debian/Ubuntu with systemd.
 # Env  : SSH_PORT  listen port  (default: unset → keep sshd default, port 22)
+#        Prompted for when unset and interactive (blank = keep default); set to skip.
 # Usage: curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/openssh.sh | sudo sh
 # ============================================================================
 set -eu
 
-SSH_PORT="${SSH_PORT:-}"
+# BayInit prompt helper — ask VAR "Prompt" "default": an env var wins; else, if a
+# terminal can be opened, prompt (Enter = default); else use the default. The
+# prompt runs in a subshell so a missing controlling terminal (cron, CI, or
+# curl|sh without a TTY) degrades to the default instead of aborting the script.
+ask() {
+    eval "_val=\${$1:-}"
+    if [ -z "$_val" ]; then
+        _ans="$( { exec 3<>/dev/tty; } 2>/dev/null && {
+            printf '%s [%s]: ' "$2" "$3" >&3
+            IFS= read -r _r <&3 && printf '%s' "$_r"
+        } )" || _ans=""
+        _val="${_ans:-$3}"
+    fi
+    eval "$1=\$_val"
+}
 
 if [ "$(id -u)" -ne 0 ]; then
     echo "openssh needs root. Re-run with sudo:" >&2
@@ -23,6 +38,8 @@ if ! command -v apt-get >/dev/null 2>&1; then
     echo "openssh: this recipe targets Debian/Ubuntu (apt-get not found)." >&2
     exit 1
 fi
+
+ask SSH_PORT "SSH port (blank = keep default 22)" ""
 
 if dpkg -s openssh-server >/dev/null 2>&1; then
     echo "==> openssh: openssh-server already installed"

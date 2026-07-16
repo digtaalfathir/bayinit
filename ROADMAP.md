@@ -19,7 +19,7 @@ not a promise — scope and order may shift.
 | [v1.0](#v10--foundation) | Foundation — static hosting, first recipes | ✅ Done |
 | [v1.1](#v11--core-recipes) | Core recipes (reusable building blocks) | ✅ Done |
 | [v1.2](#v12--profiles) | Profiles (bundle recipes into deployments) | 🚧 In progress |
-| [v1.3](#v13--interactive-configuration) | Interactive configuration (prompt when env unset) | 📋 Planned |
+| [v1.3](#v13--interactive-configuration) | Interactive configuration (prompt when env unset) | ✅ Done |
 | [v1.4](#v14--verification) | Verification (`bay verify`) | 📋 Planned |
 | [v1.5](#v15--uninstall) | Uninstall (`bay uninstall`) | 📋 Planned |
 | [v2.0](#v20--bay-cli) | Bay CLI | 💡 Exploring |
@@ -77,7 +77,7 @@ KIOSK_URL=https://dashboard.local KIOSK_WAIT=3 \
 ```
 
 Every new recipe ships configurable from day one (see [v1.1](#v11--core-recipes));
-the interactive-prompt fallback arrives in [v1.3](#v13--interactive-configuration).
+the interactive-prompt fallback landed in [v1.3](#v13--interactive-configuration).
 
 ---
 
@@ -164,17 +164,24 @@ Planned profiles: `monitoring-tablet`, `printer-server`, `developer-machine`,
 `manufactura-connect` and `stechoq-ops-center-client` — public scripts whose
 sensitive values are injected via env (see [Security model](#security-model)).
 
-### v1.3 — Interactive configuration 📋
+### v1.3 — Interactive configuration ✅
 
-Env-var overrides already exist from day one (see
-[Modular by design](#modular-by-design)). This milestone adds the fallback for
-when they aren't supplied: an interactive prompt.
+Env-var overrides exist from day one (see [Modular by design](#modular-by-design)).
+This milestone adds the fallback for when a value isn't supplied: recipes prompt
+for it when run interactively, and Enter accepts the default.
+
+Resolution order per value: **env var → interactive prompt → default**. Non-
+interactive runs (cron, CI, piped without a TTY) never block — they take the
+defaults. Prompts read `/dev/tty`, so this works even under `curl … | sh`.
 
 ```
-Dashboard URL?    > https://dashboard.local
-Launch delay?     > 5
-Enable autostart? [Y/n]
+Dashboard URL [https://example.com]: https://dashboard.local
+Startup delay in seconds [5]:
+Autostart on login (1/0) [1]:
 ```
+
+Applied to `kiosk`, `nodejs`, and `openssh` (the recipes with a real choice);
+`chrome` and `pm2` keep unambiguous defaults.
 
 ### v1.4 — Verification 📋
 

@@ -11,14 +11,32 @@
 #        KIOSK_WAIT       startup delay secs  (default: 5)
 #        KIOSK_DIR        install location    (default: $HOME/.bayinit-kiosk)
 #        KIOSK_AUTOSTART  start on login 1/0  (default: 1)
+#        Unset values are prompted for when run interactively (Enter = default);
+#        set them beforehand to skip the prompts (profiles / automation).
 # Usage: curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/kiosk.sh | sh
 # ============================================================================
 set -eu
 
-KIOSK_URL="${KIOSK_URL:-https://example.com}"
-KIOSK_WAIT="${KIOSK_WAIT:-5}"
+# BayInit prompt helper — ask VAR "Prompt" "default": an env var wins; else, if a
+# terminal can be opened, prompt (Enter = default); else use the default. The
+# prompt runs in a subshell so a missing controlling terminal (cron, CI, or
+# curl|sh without a TTY) degrades to the default instead of aborting the script.
+ask() {
+    eval "_val=\${$1:-}"
+    if [ -z "$_val" ]; then
+        _ans="$( { exec 3<>/dev/tty; } 2>/dev/null && {
+            printf '%s [%s]: ' "$2" "$3" >&3
+            IFS= read -r _r <&3 && printf '%s' "$_r"
+        } )" || _ans=""
+        _val="${_ans:-$3}"
+    fi
+    eval "$1=\$_val"
+}
+
+ask KIOSK_URL       "Dashboard URL"            "https://example.com"
+ask KIOSK_WAIT      "Startup delay in seconds" "5"
+ask KIOSK_AUTOSTART "Autostart on login (1/0)" "1"
 KIOSK_DIR="${KIOSK_DIR:-$HOME/.bayinit-kiosk}"
-KIOSK_AUTOSTART="${KIOSK_AUTOSTART:-1}"
 AUTOSTART_DIR="$HOME/.config/autostart"
 
 echo "==> kiosk: detecting browser"
