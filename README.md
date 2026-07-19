@@ -31,6 +31,7 @@ tells you exactly what the machine will become.
 | **nodejs** | Install Node.js from NodeSource (default v22) | `curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/nodejs.sh \| sudo sh` |
 | **pm2** | Install PM2 + resurrect-on-boot | `curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/pm2.sh \| sudo sh` |
 | **openssh** | Install and enable the SSH server | `curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/openssh.sh \| sudo sh` |
+| **vpn** | SoftEther client + auto-connect *(needs private repo + token)* | `BAY_VPN_TOKEN=… VPN_CLIENT_IP=10.10.1.173 curl -fsSL …/recipes/vpn.sh \| sudo -E sh` |
 | **dcs-prep** | Prepare a machine for DCS work *(work in progress)* | `curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/dcs-prep.sh \| sh` |
 
 The `kiosk` recipe takes optional overrides via environment variables:
@@ -75,6 +76,7 @@ Tags are cut per release (`v1.0`, `v1.1`, …). The Pages URLs above always trac
 | `nodejs` | yes | Debian/Ubuntu | ready |
 | `pm2` | yes | Debian/Ubuntu + systemd | ready |
 | `openssh` | yes | Debian/Ubuntu + systemd | ready |
+| `vpn` | yes | Debian/Ubuntu/Zorin + systemd, x86_64 | ready — needs private `.vpn` repo + token |
 | `dcs-prep` | TBD | Linux | skeleton — see `TODO(rifky)` markers |
 
 ## Profiles

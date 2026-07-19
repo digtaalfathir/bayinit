@@ -135,7 +135,7 @@ The core set. Each does one job and is configurable via env vars from day one
 - [x] `nodejs` — install Node.js
 - [x] `pm2` — install and set up PM2
 - [x] `openssh` — install / enable the SSH server
-- [ ] `vpn` — deferred beyond v1.1; script stays public, keys injected via env (see [Security model](#security-model))
+- [x] `vpn` — SoftEther client; public script, secret `.vpn` files fetched from a private repo via token (see [Security model](#security-model))
 
 Everything else (git, docker, nginx, cups/printer, touchscreen & power tweaks,
 tailscale/wireguard, …) waits in the [backlog](#recipe-backlog) until pulled in.

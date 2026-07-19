@@ -94,6 +94,13 @@
   </div>
 
   <div class="card">
+    <h3>vpn</h3>
+    <p class="desc">SoftEther VPN client, imported and set to auto-connect on boot. Public script; the secret <code>.vpn</code> account files are pulled from a private repo with a token you supply — no token, no connection.</p>
+    <pre><code>BAY_VPN_TOKEN=… VPN_CLIENT_IP=10.10.1.173 curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/vpn.sh | sudo -E sh</code></pre>
+    <div class="links"><a href="recipes/vpn.sh">read the script →</a></div>
+  </div>
+
+  <div class="card">
     <h3>dcs-prep <span class="badge">work in progress</span></h3>
     <p class="desc">Prepare a machine for DCS work. Skeleton for now.</p>
     <pre><code>curl -fsSL https://digtaalfathir.github.io/bayinit/recipes/dcs-prep.sh | sh</code></pre>
